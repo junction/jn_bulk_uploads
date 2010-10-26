@@ -12,7 +12,7 @@ import java.util.List;
  * @author martin
  */
 public class SessionCreateResponse extends AbstractJSONResponse {
-
+	
     public static final String ROLE_ACCOUNT_ADMIN = "Account Admin";
     private String sessionId;
     private List<String> roles = new ArrayList<String>(2);

@@ -373,10 +373,12 @@ public class BulkUserAddController {
 			if (response instanceof SessionCreateResponse) {
 				SessionCreateResponse sessionCreateResponse = (SessionCreateResponse) response;
 				List<String> roles = sessionCreateResponse.getRoles();
+				/**
 				if (!roles.contains(SessionCreateResponse.ROLE_ACCOUNT_ADMIN)) {
 					handleError("Permission denied", new IllegalArgumentException("User does not have sufficient priviliges."));
 					return false;
 				}
+				**/
 			}
 			return true;
 		}
