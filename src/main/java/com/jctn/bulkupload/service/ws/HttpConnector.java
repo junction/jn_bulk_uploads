@@ -32,6 +32,7 @@ public class HttpConnector {
             //Header
             Header header = new Header("Accept", "application/json");
             method.setRequestHeader(header);
+          
             //Parameters
             HttpMethodParams methodParams = new HttpMethodParams();
             methodParams.setContentCharset("UTF-8");

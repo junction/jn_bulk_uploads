@@ -57,7 +57,7 @@ public abstract class AbstractWebservice<T extends AbstractJSONResponse> impleme
 	 * @return Response object of type T
 	 * @throws IOException
 	 */
-	public T sendRequest(Map parameters) throws IOException {
+	public T sendRequest(Map parameters) throws IOException {		
 		parameters.put(PARAM_OUTPUT, DEFAULT_RESPONSE_FORMAT);
 		parameters.put(PARAM_ACTION, this.action);
 		if (httpConnector == null) {

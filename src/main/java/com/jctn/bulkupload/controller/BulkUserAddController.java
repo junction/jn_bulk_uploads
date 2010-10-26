@@ -49,8 +49,17 @@ public class BulkUserAddController {
 	private String sessionId;
 	private Long organizationId;
 	private final ProgressController progressController;
-
-	public BulkUserAddController(ProgressController progressController, String adminUsername, String adminPassword, String adminDomain, boolean createSession) {
+	// added OF 10-25-2010 
+	// enhanced logging
+	private long _countAnticipatedTotalUsers = 0;
+	private long _countAnticipatedTotalVms   = 0;
+	private long _countUserModAdded          = 0;
+	private long _countUserModAlias          = 0;	
+	private long _countVmModAdded            = 0;	
+	private long _countVmModLink             = 0;
+	
+	public BulkUserAddController(ProgressController progressController, String adminUsername, 
+				String adminPassword, String adminDomain, boolean createSession) {
 		this.adminUsername = adminUsername;
 		this.adminPassword = adminPassword;
 		this.adminDomain = adminDomain;
@@ -65,9 +74,19 @@ public class BulkUserAddController {
 	 */
 	public final void initSession() {
 		this.sessionId = createSession(adminUsername, adminPassword, adminDomain);
-		this.organizationId = fetchOrganizationId(adminDomain);
+		this.organizationId = fetchOrganizationId(adminDomain);		
+		this.resetMetrics();
 	}
 
+	private void resetMetrics(){
+		_countAnticipatedTotalUsers = 0;
+		_countAnticipatedTotalVms   = 0;		
+		_countUserModAdded          = 0;
+		_countUserModAlias          = 0;	
+		_countVmModAdded            = 0;	
+		_countVmModLink             = 0;
+	}
+	
 	public String getSessionId() {
 		return sessionId;
 	}
@@ -88,6 +107,36 @@ public class BulkUserAddController {
 		this.adminUsername = adminUsername;
 	}
 
+	// added OF 10-25-2010 
+	// enhanced logging		
+	@Override
+	public String toString() {		
+		String s = "<html><table>";
+		s += "<tr><td colspan='2'>Results Diagnostics</td></tr>";
+		s += "<tr><td colspan='2'>====================</td></tr>";
+		s += "<tr><td>Total Users Processed</td><td>" + this._countUserModAdded + " / "; 
+		s +=                                            this._countAnticipatedTotalUsers + "</td></tr>";		
+		s += "<tr><td>Added voicemail </td><td>"      + this._countVmModAdded + " / ";
+		s +=                                            this._countAnticipatedTotalVms   + "</td></tr>";
+		s += "<tr><td>Added alias </td><td>"          + this._countUserModAlias          + "</td></tr>";		
+		s += "<tr><td>Added Voicemail Link </td><td>" + this._countVmModLink 			 + "</td></tr>";		
+		s += "<table></html>";
+		
+		String debug = "";
+		debug += "Results Diagnostics\n";
+		debug += "====================\n";
+		debug += "Total Users Processed" + this._countUserModAdded + " / "; 
+		debug +=                           this._countAnticipatedTotalUsers + "\n";		
+		debug += "Added voicemail"       + this._countVmModAdded + " / ";
+		debug +=                           this._countAnticipatedTotalVms + "\n";
+		debug += "Added alias"           + this._countUserModAlias + "\n";		
+		debug += "Added Voicemail Link " + this._countVmModLink + "\n";				
+		
+		logger.info(debug);
+		return s;
+	}
+	
+	
 	/**
 	 * Parse the given CSV file. Columns expected:
 	 * <ol>
@@ -101,24 +150,50 @@ public class BulkUserAddController {
 	 * @return
 	 */
 	public Collection<User> parseCsv(File csvFile) throws FileNotFoundException, IOException {
+		this.resetMetrics();
 		BufferedReader reader = new BufferedReader(
 				new InputStreamReader(
 				new FileInputStream(csvFile)));
 		String line = null;
 		StrTokenizer tokenizer = StrTokenizer.getCSVInstance();
 		tokenizer.setIgnoreEmptyTokens(false);
-		Collection<User> results = new ArrayList<User>(20);
-		//skip the first line
+		Collection<User> results = new ArrayList<User>(20);		
+		// Added 10-25-2010
+		// Read forward and trap errors and logging
+		// skip the first line	
+		line = reader.readLine();		
+		while ((line = reader.readLine()) != null) {
+			tokenizer.reset(line);
+			try {				
+				String[] tokens = tokenizer.getTokenArray();
+				if (line.length() > 0) { // ignore empty rows
+					if (tokens.length != 5) {
+						logger.error("Unprocessable line (does not have 5 values): " + line);
+						String f = "First,Last,Extension,Email,Voicemail(Y/N)";
+						throw new Exception("Poorly formatted line - Expected : " + f + 
+									"\n Found " + line);
+					}
+					
+					this._countAnticipatedTotalUsers++;	
+					this._countAnticipatedTotalVms = "y".equalsIgnoreCase(tokens[4]) ? 
+								this._countAnticipatedTotalVms + 1: this._countAnticipatedTotalVms;
+				}
+			} catch (Exception e) {
+				logger.error("Parsing failed for line: " + line, e);
+			}
+		}
+		reader.close();
+		reader = new BufferedReader(
+				new InputStreamReader(
+				new FileInputStream(csvFile)));
 		line = reader.readLine();
 		while ((line = reader.readLine()) != null) {
 			tokenizer.reset(line);
 			try {
-				String[] tokens = tokenizer.getTokenArray();
-				if (tokens.length != 5) {
-					logger.error("Unprocessable line (does not have 5 values): " + line);
-					continue;
+				if (line.length() > 0) { // ignore empty rows
+					String[] tokens = tokenizer.getTokenArray();				
+					results.add(constructUserFromLineParts(tokens));
 				}
-				results.add(constructUserFromLineParts(tokens));
 			} catch (Exception e) {
 				logger.error("Parsing failed for line: " + line, e);
 			}
@@ -162,7 +237,7 @@ public class BulkUserAddController {
 	public void bulkUpload(Collection<User> users) {
 		progressController.setCurrentTask("Adding users...", 0, 100);
 		progressController.setIndeterminate(false);
-		int i = 1;
+		int i = 1;		
 		for (User user : users) {
 			logger.info("Uploading user: " + user);
 			try {
@@ -188,7 +263,7 @@ public class BulkUserAddController {
 		String originalAuthUsername = null;
 		String originalUsername = null;
 		while (!usenamesGood) {
-			execUserAdd(user);
+			execUserAdd(user);			
 			if (originalAuthUsername == null) {
 				originalAuthUsername = user.getAuthUsername();
 			}
@@ -200,7 +275,7 @@ public class BulkUserAddController {
 				break;
 			}
 
-			//@TODO: see what kind of error message is retuned for existing username and auth_username
+			//@TODO: see what kind of error message is returned for existing username and auth_username
 			//and leverage here
 			if (user.getError().contains("username") || user.getError().contains("auth_username")) {
 				String suffixStr = suffix + "";
@@ -230,29 +305,40 @@ public class BulkUserAddController {
 
 		if (!StringUtils.isEmpty(user.getError())) {
 			return;
-		}
-		//add extension--UserAliasAdd
-		logger.debug("Step 2: UserAliasAdd (extension)");
-		execUserAliasAdd(user, new UserAliasAdd());
-		if (!StringUtils.isEmpty(user.getError())) {
-			return;
+		}else{
+			this._countUserModAdded++;
 		}
 
+		//add extension--UserAliasAdd
+		logger.debug("Step 2: UserAliasAdd (extension)");
+		execUserAliasAdd(user, new UserAliasAdd());		
+		if (!StringUtils.isEmpty(user.getError())) {
+			return;
+		}else{
+			this._countUserModAlias++;
+		}
 		//If the user doesn't want voice mail, we're done.
 		if (!user.isAddVoicemail()) {
 			logger.debug("User does not want voicemail. All done.");
 			return;
 		}
+						
 		//add vm box--VoicemailoboxAdd
 		logger.debug("Step 3: VoicemailBoxAdd");
 		execVoicemailBoxAdd(user, new VoicemailboxAdd());
+		
 		if (!StringUtils.isEmpty(user.getError())) {
 			return;
+		}else{
+			this._countVmModAdded++;
 		}
 
 		//link user to vm--UserAddressEdit.
 		logger.debug("Step 4: UserAddressEdit (link voicemail)");
 		execUserAddressEdit(user, new UserAddressEdit());
+		if (StringUtils.isEmpty(user.getError())) {
+			this._countVmModLink++;
+		}
 	}
 
 	protected final String createSession(String adminUsername, String adminPassword, String adminDomain) {

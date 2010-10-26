@@ -77,7 +77,7 @@ public class UserAdd extends AbstractWebservice<UserAddResponse> {
 	 * @return
 	 */
 	public String createUsername(String emailUsername) {
-		emailUsername = emailUsername.trim();
+		emailUsername = emailUsername.trim().toLowerCase();
 		//emailUsername = replaceUnwanted(emailUsername, "[^a-z0-9_\\-\\.]", "_");
 		emailUsername = StringUtils.removeStart(emailUsername, "-");
 		emailUsername = StringUtils.removeEnd(emailUsername, "-");

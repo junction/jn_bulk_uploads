@@ -67,7 +67,7 @@ public class BulkUserAddControllerTest extends AbstractJunctionWSTest {
 	 * Test of parseCsv method, of class BulkUserAddController.
 	 */
 	public void testParseCsvGood() throws URISyntaxException, FileNotFoundException, IOException {
-		System.out.println("parseCsvGood");
+		System.out.println("parseCsvGood");		
 		File csvFile = new File(this.getClass().getResource("/goodline.csv").toURI());
 
 		Collection<User> result = controller.parseCsv(csvFile);

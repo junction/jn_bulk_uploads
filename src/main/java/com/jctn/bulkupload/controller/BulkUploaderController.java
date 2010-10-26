@@ -87,16 +87,27 @@ public class BulkUploaderController {
 	 * @param csvFile
 	 * @throws Exception
 	 */
-	public void startUpload(ProgressController progressController, String adminUsername, char[] adminPassword, String domain, File csvFile) throws Exception {
-		if (userAddController == null) {
-			userAddController = new BulkUserAddController(progressController, adminUsername, new String(adminPassword), domain, true);
-		}
+	public void startUpload(ProgressController progressController, String adminUsername, char[] adminPassword, 
+			String domain, File csvFile) throws Exception {
+		//if (userAddController == null) {
+			userAddController = new BulkUserAddController(
+					progressController, adminUsername, 
+					new String(adminPassword), domain, true);
+		//}
 		//parse the file
 		Collection<User> users = userAddController.parseCsv(csvFile);
 		//submit the parsed lines for processing
 		userAddController.bulkUpload(users);
+		
 	}
 
+	// added OF 10-25-2010 
+	// enhanced logging		
+	@Override
+	public String toString() {		
+		return userAddController.toString();
+	}
+	
 	/**
 	 * Returns true/false depending on if the input is valid.
 	 * @param errors List of errors is stored here. It is cleared before the input is processed.
