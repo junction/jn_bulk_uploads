@@ -56,3 +56,10 @@ g. Hid one of two portions of logging that writes password in clear text to log
 6. Packaging
 -----------------------
 On the Mac. Created the app bundle using "Jar Bundler" followed by "PackageMaker"
+
+7. TODOs
+-----------------------
+- Remove cleartext password from logging
+- Refactor auto-generated swing based UI code
+- Enhance PC Support
+- Modify Progress bar to be show immediate processing. Currently, their is a bit of a lag, so the app appears a bit stagnant.
