@@ -34,6 +34,8 @@ public class LogFactory {
 
 	/**
 	 * Returns the configured logger for this app.
+	 * OF 10-27-2010
+	 * Temporarily removed in favor of using the Log4j.xml configuration file
 	 * @param clazz
 	 * @return
 	 */

@@ -42,7 +42,7 @@ import org.apache.log4j.Logger;
  */
 public class BulkUserAddController {
 
-	private static final Logger logger = LogFactory.getLogger(BulkUserAddController.class);
+	private static final Logger logger = Logger.getLogger(BulkUserAddController.class);
 	private String adminUsername;
 	private String adminPassword;
 	private String adminDomain;
@@ -343,7 +343,7 @@ public class BulkUserAddController {
 
 	protected final String createSession(String adminUsername, String adminPassword, String adminDomain) {
 		SessionCreate sessionCreate = new SessionCreate();
-		Map params = new HashMap();
+		Map<String, String> params = new HashMap<String, String>();
 		params.put("Username", this.adminUsername);
 		params.put("Password", this.adminPassword);
 		String sessionId_ = null;
@@ -368,25 +368,30 @@ public class BulkUserAddController {
 			return false;
 		}
 
-		if (!response.hasError()) {
+		if (response.hasError()) {
+			// OF 10-27-2010
+			// This is not necessary. The API would be responsible for throwing the error.
+			
 			//check the role if this is a sessioncreateresponse. This is a logical error check
-			if (response instanceof SessionCreateResponse) {
-				SessionCreateResponse sessionCreateResponse = (SessionCreateResponse) response;
-				List<String> roles = sessionCreateResponse.getRoles();
+			//if (response instanceof SessionCreateResponse) {
+				//SessionCreateResponse sessionCreateResponse = (SessionCreateResponse) response;
+				//List<String> roles = sessionCreateResponse.getRoles();
 				/**
 				if (!roles.contains(SessionCreateResponse.ROLE_ACCOUNT_ADMIN)) {
 					handleError("Permission denied", new IllegalArgumentException("User does not have sufficient priviliges."));
 					return false;
 				}
 				**/
-			}
-			return true;
+			//}
+			
+			//We know we have an error here so we'll just let the user know what it was.
+			String errorStr = constructErrorString(response.getErrors());
+			handleError("Error in response: " + errorStr, new IllegalStateException("Response error"));
+			return false;
 		}
 
-		//We know we have an error here so we'll just let the user know what it was.
-		String errorStr = constructErrorString(response.getErrors());
-		handleError("Error in response: " + errorStr, new IllegalStateException("Response error"));
-		return false;
+		return true;
+		
 	}
 
 	private void handleError(String string, Exception e) {
@@ -396,7 +401,7 @@ public class BulkUserAddController {
 	}
 
 	private Long fetchOrganizationId(String adminDomain) {
-		Map params = new HashMap();
+		Map<String, String> params = new HashMap<String, String>();
 		params.put(UserAdd.PARAM_SESSION_ID, getSessionId());
 		//get the organization ID via OrgRead
 		OrganizationRead orgRead = new OrganizationRead();
@@ -436,7 +441,7 @@ public class BulkUserAddController {
 	 * @throws IOException
 	 */
 	private void execUserAdd(User user) throws IOException {
-		Map params = new HashMap();
+		Map<String, String> params = new HashMap<String, String>();
 		params.put(UserAdd.PARAM_SESSION_ID, getSessionId());
 		UserAdd userAdd = new UserAdd();
 		//Username and authusername
@@ -470,7 +475,7 @@ public class BulkUserAddController {
 	 * @param user
 	 */
 	void execUserAliasAdd(User user, UserAliasAdd userAliasAdd) throws IOException {
-		Map params = new HashMap();
+		Map<String, String> params = new HashMap<String, String>();
 		params.put(UserAliasAdd.PARAM_SESSION_ID, getSessionId());
 		params.put(UserAliasAdd.PARAM_ORGANIZATION_ID, getOrganizationId() + "");
 		params.put(UserAliasAdd.PARAM_ALIAS_USERNAME, user.getExtension() + "");
@@ -487,14 +492,15 @@ public class BulkUserAddController {
 	}
 
 	/**
-	 * Adds a voicemail box to the current organization. The mailbox is intended to be linked to the given user.
-	 * This method does NOT link the mail box. That must be done in a separate operation via {@linkplain UserAddressEdit}
+	 * Adds a voicemail box to the current organization. The mailbox is intended 
+	 * to be linked to the given user. This method does NOT link the mail box. 
+	 * That must be done in a separate operation via {@linkplain UserAddressEdit}
 	 * @param user
 	 * @param voicemailboxAdd
 	 * @throws IOException
 	 */
 	void execVoicemailBoxAdd(User user, VoicemailboxAdd voicemailboxAdd) throws IOException {
-		Map params = new HashMap();
+		Map<String, String> params = new HashMap<String, String>();
 		params.put(VoicemailboxAdd.PARAM_SESSION_ID, getSessionId());
 		params.put(VoicemailboxAdd.PARAM_ORGANIZATION_ID, getOrganizationId() + "");
 		params.put(VoicemailboxAdd.PARAM_USERNAME, user.getVmUsername());
@@ -516,7 +522,7 @@ public class BulkUserAddController {
 	}
 
 	void execUserAddressEdit(User user, UserAddressEdit userAddressEdit) throws IOException {
-		Map params = new HashMap();
+		Map<String, String> params = new HashMap<String, String>();
 		params.put(UserAddressEdit.PARAM_SESSION_ID, getSessionId());
 		params.put(UserAddressEdit.PARAM_ADDRESS, user.getUsername() + "@" + this.adminDomain);
 		params.put(UserAddressEdit.PARAM_DEFAULT_ADDRESS, user.getVmUsername() + "@" + this.adminDomain);

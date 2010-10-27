@@ -11,10 +11,10 @@
 	
 	<appender name="R" class="org.apache.log4j.RollingFileAppender"> 
     	<param name="file" value="${user.home}/bulkupload.log"/>
-    	<param name="MaxFileSize" value="100KB"/>
+    	<param name="MaxFileSize" value="2MB"/>
     	<!-- Keep one backup file -->
     	<param name="Append" value="false" />    	
-    	<param name="MaxBackupIndex" value="3"/>
+    	<param name="MaxBackupIndex" value="1"/>
     	<layout class="org.apache.log4j.PatternLayout"> 
       		<param name="ConversionPattern" value="%p %t %c - %m%n"/> 
     	</layout> 

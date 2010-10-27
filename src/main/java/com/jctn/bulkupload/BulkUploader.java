@@ -48,7 +48,7 @@ import org.apache.log4j.RollingFileAppender;
  */
 public class BulkUploader extends javax.swing.JFrame {
 
-	private static Logger logger = LogFactory.getLogger(BulkUploader.class);
+	private static Logger logger = Logger.getLogger(BulkUploader.class);
 	private BulkUploaderController guiController;
 	private File csvFile = null;
 
@@ -414,6 +414,7 @@ public class BulkUploader extends javax.swing.JFrame {
             }
         });
         
+        this.setResizable(false);
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
@@ -606,7 +607,7 @@ public class BulkUploader extends javax.swing.JFrame {
 					//UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
 					UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 				} catch (Exception e) {
-					LogFactory.getLogger(BulkUploader.class).error("Error setting LAF", e);
+					Logger.getLogger(BulkUploader.class).error("Error setting LAF", e);
 				}
 				//Create a new instance of this class
 				BulkUploader bu = new BulkUploader();

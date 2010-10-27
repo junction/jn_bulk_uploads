@@ -1,0 +1,58 @@
+Junction Networks Bulk Uploader -  Leverages web services to import users in batch
+
+1. Author
+--------------
+Oren Forer
+oren@junctionnetworks.com
+extension: 7021
+
+Date Created:
+10-27-2010
+
+Modified:
+10-27-2010
+
+
+2. Installation
+----------------
+There are two steps necessary to complete the install.
+a. Run the "Junction Networks Bulk Uploader" package installer
+b. Due to SSL verification issues the follow command needs to be executed as root.
+      sudo keytool -import -trustcacerts \
+        	-file <path-to-cert-file>/cert/www.jnctn.com \
+		-alias www.jnctn.com \ 
+		-keystore /System/Library/Frameworks/JavaVM.framework/Versions/1.6.0/Home/lib/security/cacerts 
+
+      - Enter your root password to execute keytool
+      - When prompted for the "keystore password", the default pwd is "changeit"
+      
+
+3. Development
+---------------
+In order to setup the development enviroment the following resources need to be configured.
+a. The source code - src/main/java
+b. The resources (property files, log configurations,  and images) - src/main/resources
+c. lib dependencies - lib/
+
+Additionally, to setup the testing environment.
+a. Requires junit
+b. The test cases - src/test/java
+c. The resources used in the test cases  - src/test/resources
+
+4. Git Repository
+-----------------
+git@github.com:junction/jn_bulk_uploads.git
+
+5. Fixes / Enhancements 
+------------------------
+a. Upon a successful upload; username, domain, and CSV are cached so that end users don't have to re-enter their params.
+b. End users can launch and view the log file after executing the upload directly from confirmation modal
+c. Executes upload process by hitting the Enter key
+d. Modified username extraction by supporting e-mail addresses with Uppercase notations
+e. Set focus on Password Textfield if Username has been filled
+f. Enhanced logging by showing results of the executed process.  (i.e. how many Users added, how many voicemails added)
+g. Hid one of two portions of logging that writes password in clear text to log
+
+6. Packaging
+-----------------------
+On the Mac. Created the app bundle using "Jar Bundler" followed by "PackageMaker"

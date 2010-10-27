@@ -59,7 +59,8 @@ public class UserAdd extends AbstractWebservice<UserAddResponse> {
 	}
 
 	/**
-	 * Replaces all non alphanumeric lowercase chars with an underscore. If the resulting string ends up starting
+	 * Replaces all non alphanumeric lowercase chars with an underscore. 
+	 * If the resulting string ends up starting
 	 * or ending with an underscore, then those are stripped respectively.
 	 * @param input
 	 * @return

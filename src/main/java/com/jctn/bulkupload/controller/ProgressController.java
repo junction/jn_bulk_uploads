@@ -13,7 +13,7 @@ import org.apache.log4j.Logger;
  */
 public class ProgressController {
 
-	private static final Logger logger = LogFactory.getLogger(ProgressController.class);
+	private static final Logger logger = Logger.getLogger(ProgressController.class);
 	JProgressBar progressBar;
 	JLabel progressLabel;
 	final String originalLabelText;

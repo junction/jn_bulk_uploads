@@ -31,23 +31,21 @@ public class HttpConnector {
         try {
             //Header
             Header header = new Header("Accept", "application/json");
-            method.setRequestHeader(header);
-          
+            method.setRequestHeader(header);          
             //Parameters
             HttpMethodParams methodParams = new HttpMethodParams();
             methodParams.setContentCharset("UTF-8");
             //Body
-            List<NameValuePair> body = new ArrayList(stringParams.size());
+            List<NameValuePair> body = new ArrayList<NameValuePair>(stringParams.size());
             for (String paramName : stringParams.keySet()) {
                 body.add(new NameValuePair(paramName, stringParams.get(paramName)));
             }
-
             method.setRequestBody(body.toArray(new NameValuePair[]{}));
-
             int response = client.executeMethod(method);
             if (response != HttpStatus.SC_OK) {
                 throw new IllegalStateException("Http request failed: " + response);
             }
+           
             responseBody = method.getResponseBody();
         } finally {
             method.releaseConnection();
