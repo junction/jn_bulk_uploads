@@ -32,6 +32,7 @@ import java.util.List;
 import java.util.Map;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.text.StrTokenizer;
+import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 /**
@@ -60,9 +61,9 @@ public class BulkUserAddController {
 	
 	public BulkUserAddController(ProgressController progressController, String adminUsername, 
 				String adminPassword, String adminDomain, boolean createSession) {
-		this.adminUsername = adminUsername;
-		this.adminPassword = adminPassword;
-		this.adminDomain = adminDomain;
+		this.adminUsername      = adminUsername;
+		this.adminPassword      = adminPassword;
+		this.adminDomain        = adminDomain;
 		this.progressController = progressController;
 		if (createSession) {
 			initSession();
@@ -127,9 +128,9 @@ public class BulkUserAddController {
 		debug += "====================\n";
 		debug += "Total Users Processed" + this._countUserModAdded + " / "; 
 		debug +=                           this._countAnticipatedTotalUsers + "\n";		
-		debug += "Added voicemail"       + this._countVmModAdded + " / ";
+		debug += "Added voicemail "      + this._countVmModAdded + " / ";
 		debug +=                           this._countAnticipatedTotalVms + "\n";
-		debug += "Added alias"           + this._countUserModAlias + "\n";		
+		debug += "Added alias "          + this._countUserModAlias + "\n";		
 		debug += "Added Voicemail Link " + this._countVmModLink + "\n";				
 		
 		logger.info(debug);
@@ -348,13 +349,21 @@ public class BulkUserAddController {
 		params.put("Password", this.adminPassword);
 		String sessionId_ = null;
 		try {
+			logger.info("Turning off logger for CreateSession call");
+			Logger logContent = Logger.getLogger("httpclient.wire.content");
+			Logger logHeader  = Logger.getLogger("httpclient.wire.header");
+			Level lOrig       = logContent.getLevel();
+			logContent.setLevel(Level.ERROR);
+			logHeader.setLevel(Level.ERROR);
 			SessionCreateResponse response = sessionCreate.sendRequest(params);
+			logContent.setLevel(lOrig);
+			logHeader.setLevel(lOrig);
 			//validate the response
 			if (!validateResponse(response)) {
 				return sessionId_;
-			}
-
+			}				
 			sessionId_ = response.getSessionId();
+			logger.info("CreateSession call returned successfully with ID " + sessionId_);
 		} catch (Exception e) {
 			handleError("Error creating session.", e);
 			throw new IllegalStateException(e);

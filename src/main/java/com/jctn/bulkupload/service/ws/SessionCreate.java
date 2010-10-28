@@ -14,8 +14,6 @@ import org.json.simple.parser.JSONParser;
  */
 public class SessionCreate extends AbstractWebservice<SessionCreateResponse> {
 
-	private String url = "https://www.jnctn.com/restapi";
-
 	public SessionCreate() {
 		super.action = "SessionCreate";
 	}
