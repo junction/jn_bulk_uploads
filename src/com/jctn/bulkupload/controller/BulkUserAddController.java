@@ -260,7 +260,7 @@ public class BulkUserAddController {
      */
      private Phone constructPhonesFromLineParts(String[] tokens) {
          boolean valid = false;
-	 Phone phone   = new Phone();
+	 Phone   phone = new Phone();
 	 phone.setMacAddress (tokens[0]);
 	 phone.setMake       (tokens[1]);
 	 phone.setModel      (tokens[2]);

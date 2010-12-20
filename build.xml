@@ -1,0 +1,85 @@
+<project name="Bulkuploader" default="classes" basedir=".">
+    <description>
+        Build BulkUploader
+    </description>
+
+    <!-- set global properties for this build -->
+    <property name="src.dir" location="src"/>
+    <property name="classes.dir" location="classes"/>
+    <property name="lib.dir" value="lib" />
+    <property name="release.dir" value="release" />
+    <property name="installer.dir" value="installers/mac" />
+    <property name="packagemaker" value="/Developer/Applications/Utilities/PackageMaker.app/Contents/MacOS/PackageMaker" />
+    <path id="classpath">
+      <pathelement location="${classes.dir}"/>
+      <fileset dir="${classes.dir}">
+	<include name="*"/>
+      </fileset>
+      <fileset dir="${lib.dir}">
+        <include name="*"/>
+      </fileset>
+    </path>
+
+    <target name="compile">
+      <tstamp/>
+      <mkdir dir="${classes.dir}"/>
+      <mkdir dir="release"/>
+      <copy todir="${classes.dir}/com/jctn/bulkupload/resources">
+	<fileset dir="${src.dir}/resources"/>
+      </copy>
+      <copy todir="${classes.dir}">
+	<fileset dir="${src.dir}/resources" >
+	  <include name="log4j*" />
+	</fileset>
+      </copy>
+      <javac srcdir="${src.dir}" destdir="${classes.dir}" includeantruntime="false" classpathref="classpath"/>      
+      <jar destfile="${lib.dir}/bulkuploader.jar" basedir="${classes.dir}" />
+      <taskdef name="jarbundler" classname="net.sourceforge.jarbundler.JarBundler" />      
+
+      <jarbundler dir="${release.dir}" name="Junction Networks Bulk Uploader" jvmversion="1.5+" 
+		  build="1.5 with Phone import" version="1.5" verbose="true" icon="${src.dir}/resources/icon_onsip.icns" 
+		  bundleid="com.jctn.bulkupload.BulkUploader"
+		  mainclass="com.jctn.bulkupload.BulkUploader">
+	<jarfileset dir="lib">
+	  <include name="*" />
+	</jarfileset> 
+      </jarbundler>
+      
+      <!-- Delete the pkg if it exists -->
+      <delete dir="${release.dir}/Junction Networks Bulk Uploader.pkg" />
+
+      <!-- Create the pkg -->
+      <exec executable="${packagemaker}"> 
+	<arg value="--doc" /> 
+	<arg value="${installer.dir}/Junction_Network_Batch_Loader.pmdoc" />
+	<arg value="--out" />
+	<arg value="${release.dir}/Junction Networks Bulk Uploader.pkg" />
+      </exec>      
+     
+      <antcall target="pkg-exists"/>
+      
+    </target>
+
+    <condition property="resourceexists">
+      <resourceexists>
+	  <file file="${release.dir}/Junction Networks Bulk Uploader.pkg"/>
+	</resourceexists>     
+    </condition>
+
+    <target name="pkg-exists" if="resourceexists">
+      <echo message="Successfully created pkg ${release.dir}/Junction Networks Bulk Uploader.pkg"/>
+    </target>
+
+    <target name="run" description="run">
+      <java fork="yes" failonerror="true"
+           maxmemory="128m" classpathref="classpath" 
+	   classname="com.jctn.bulkupload.BulkUploader">
+      </java>
+    </target>
+
+    <target name="clean" description="clean up">
+        <delete dir="${classes.dir}"/>
+	<delete dir="${release.dir}/Junction Networks Bulk Uploader.pkg" />
+    </target>
+
+</project>

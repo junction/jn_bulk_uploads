@@ -6,10 +6,13 @@ nbactions.xml
 *.DS_Store
 bin/
 classes/
+lib/bulkuploader.jar
+dist/*
+installers/windows/*
 .project
-.classpah
+.classpath
 #*
 *~
 #Makefile#
 .#Makefile
-
+release/
