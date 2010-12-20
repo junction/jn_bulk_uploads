@@ -1,4 +1,6 @@
-Junction Networks Bulk Uploader -  Leverages web services to import users in batch
+Junction Networks Bulk Uploader -  Leverages web services to import users & phones in batch
+
+IMPORTANT: In order to build the Bulk Uploader on a Mac USING ANT, both Ant and JarBundler (http://informagen.com/JarBundler/) are required.
 
 1. Author
 --------------
@@ -10,8 +12,7 @@ Date Created:
 10-27-2010
 
 Modified:
-10-27-2010
-
+12-20-2010
 
 2. Installation
 ----------------
@@ -30,14 +31,14 @@ b. Due to SSL verification issues the follow command needs to be executed as roo
 3. Development
 ---------------
 In order to setup the development enviroment the following resources need to be configured.
-a. The source code - src/main/java
-b. The resources (property files, log configurations,  and images) - src/main/resources
+a. The source code - src/
+b. The resources (property files, log configurations,  and images) - src/resources
 c. lib dependencies - lib/
 
 Additionally, to setup the testing environment.
 a. Requires junit
-b. The test cases - src/test/java
-c. The resources used in the test cases  - src/test/resources
+b. The test cases - test/
+c. The resources used in the test cases  - test/resources
 
 4. Git Repository
 -----------------
@@ -53,9 +54,18 @@ e. Set focus on Password Textfield if Username has been filled
 f. Enhanced logging by showing results of the executed process.  (i.e. how many Users added, how many voicemails added)
 g. Hid one of two portions of logging that writes password in clear text to log
 
+12/20/2010
+^^^^^^^^^^
+- Added support for batch uploading or importing Phones, specifically Polycom phones.
+- Wrote an Ant based build utiilty.
+
 6. Packaging
 -----------------------
-On the Mac. Created the app bundle using "Jar Bundler" followed by "PackageMaker"
+Created an Ant based build file. Executing "Ant compile" will compile all the source, create the Jar files,
+run the Jar Bundler utility, and initiate PackageMaker.
+In order to Run "Ant compile" Both Ant and "JarBundler.jar" (http://informagen.com/JarBundler/) are required.
+
+Created the app bundle using "Jar Bundler" followed by "PackageMaker"
 
 7. TODOs
 -----------------------
