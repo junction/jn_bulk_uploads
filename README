@@ -1,4 +1,5 @@
-Junction Networks Bulk Uploader -  Leverages web services to import users & phones in batch
+Junction Networks Bulk Uploader -  
+Leverages web services to import users & phones in batch
 
 IMPORTANT: In order to build the Bulk Uploader on a Mac USING ANT, both Ant and JarBundler (http://informagen.com/JarBundler/) are required.
 
@@ -15,7 +16,7 @@ Modified:
 12-20-2010
 
 2. Installation
-----------------
+-------------------
 There are two steps necessary to complete the install.
 a. Run the "Junction Networks Bulk Uploader" package installer
 b. Due to SSL verification issues the follow command needs to be executed as root.
@@ -29,7 +30,7 @@ b. Due to SSL verification issues the follow command needs to be executed as roo
       
 
 3. Development
----------------
+--------------------
 In order to setup the development enviroment the following resources need to be configured.
 a. The source code - src/
 b. The resources (property files, log configurations,  and images) - src/resources
@@ -41,7 +42,7 @@ b. The test cases - test/
 c. The resources used in the test cases  - test/resources
 
 4. Git Repository
------------------
+---------------------
 git@github.com:junction/jn_bulk_uploads.git
 
 5. Fixes / Enhancements 
@@ -65,11 +66,58 @@ Created an Ant based build file. Executing "Ant compile" will compile all the so
 run the Jar Bundler utility, and initiate PackageMaker.
 In order to Run "Ant compile" Both Ant and "JarBundler.jar" (http://informagen.com/JarBundler/) are required.
 
-Created the app bundle using "Jar Bundler" followed by "PackageMaker"
+Created the app bundle using "Jar Bundler" followed by "PackageMaker". These come with XCode.
 
 7. TODOs
 -----------------------
 - Remove cleartext password from logging
 - Refactor auto-generated swing based UI code
 - Enhance PC Support
-- Modify Progress bar to be show immediate processing. Currently, their is a bit of a lag, so the app appears a bit stagnant.
+- Modify Progress bar to show immediate processing. Currently, their is a bit of a lag, so the app appears a bit stagnant.
+
+8. Using
+------------------------
+Please Review #2 (Installation) Of this README file.  The Bulk Uploader will install properly but will fail to run if #2 (Installation) isn't executed.
+The Bulk Uploader comes in a Mac Package Installer.  Running the installer will drop the "Junction Networks Bulk Uploader.app"
+into Mac Applications.  Runnning the app requires a number of fields to be entered.
+I.   OnSIP username
+II.  OnSIP password
+III. OnSIP domain
+IV.  File Selection of a CSV file.
+
+There are two optional formats.  The first will upload User data, and the second will upload Phone data.
+1. Users example: 
+*********************************************************
+First,Last,Extension,Email,Voicemail(Y/N)
+test_123,test_565,2121,cust_1234@example.com,Y
+********************************************************
+The first line is assumed to be the header and is required.  The script will start reading data from the second line of the CSV file.
+First Name, Last Name, Extension, Email, Include Voicemail (Y, N)
+
+2. Phone example:
+*********************************************************
+MacAddress, Make (all polycom for now), Model, GMT Offset
+0004f2accaca, Polycom, Polycom Soundpoint 330, 4
+*********************************************************
+The first line is assumed to be the header and is required for phone imports.  Bulk uploader supports only  Polycom phones.
+Valid Polycom Models are:
+Polycom Soundpoint 301, Polycom Soundpoint 320
+Polycom Soundpoint 321, Polycom Soundpoint 330
+Polycom Soundpoint 331, Polycom Soundpoint 335
+Polycom Soundpoint 430, Polycom Soundpoint 450
+Polycom Soundpoint 501, Polycom Soundpoint 550
+Polycom Soundpoint 560, Polycom Soundpoint 601
+Polycom Soundpoint 650, Polycom Soundpoint 670
+Polycom Soundstation 4000, Polycom Soundstation 6000
+Polycom Soundstation 7000
+
+Valid GMT Offsets are (-12, -11.5, -11, -10.5, -10 ... , 0, ... .5, 1, 1.5, 2, ... 13)  
+
+MacAddress can be found on the back of the phone.
+
+9. BUGS
+--------------------------
+developer@junctionnetworks.com
+
+
+
