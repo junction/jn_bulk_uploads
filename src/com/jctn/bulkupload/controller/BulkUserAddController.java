@@ -264,7 +264,7 @@ public class BulkUserAddController {
 	 phone.setMacAddress (tokens[0]);
 	 phone.setMake       (tokens[1]);
 	 phone.setModel      (tokens[2]);
-	 phone.setGmtOffset  (tokens[3].replaceAll("\\D",""));
+	 phone.setGmtOffset  (tokens[3].trim());
 	 
 	 if (StringUtils.isEmpty(phone.getMacAddress())) {
 	     /** TODO **/
@@ -304,14 +304,14 @@ public class BulkUserAddController {
 	     throw new IllegalArgumentException("Gmt offset was not specified");
 	 } else {	     
 	     for (int i = 0; i < Phone.GMT_OFFSET_ALIAS.length; i++) {		 
-		 if (Phone.GMT_OFFSET_ALIAS[i].equalsIgnoreCase (phone.getGmtOffset())) {
-		     phone.setGmtOffset(Phone.GMT_OFFSET[i]);
-		     valid = true;
-		     break;
-		 }
+			 if (Phone.GMT_OFFSET_ALIAS[i].equalsIgnoreCase (phone.getGmtOffset())) {
+			     phone.setGmtOffset(Phone.GMT_OFFSET[i]);
+			     valid = true;
+			     break;
+			 }
 	     }	     
 	     if (!valid) {
-		 throw new IllegalArgumentException("GMT OFFSET was invalid for MacAddress " + phone.getMacAddress());
+	    	 throw new IllegalArgumentException("GMT OFFSET was invalid for MacAddress " + phone.getMacAddress());
 	     }
 	 }
 	 return phone;

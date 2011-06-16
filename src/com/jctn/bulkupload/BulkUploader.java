@@ -350,9 +350,9 @@ public class BulkUploader extends javax.swing.JFrame {
 
         aboutMenuItem.setMnemonic('A');
         aboutMenuItem.setText(resourceMap.getString("aboutMenuItem.text")); // NOI18N
-        aboutMenuItem.setName("aboutMenuItem"); // NOI18N
+        aboutMenuItem.setName("aboutMenuItem"); // NOI18N        
         aboutMenuItem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {            	
                 aboutMenuItemActionPerformed(evt);
             }
         });        
@@ -575,8 +575,8 @@ public class BulkUploader extends javax.swing.JFrame {
 	    @Override
 	    public void run() {
 	        AboutDialog about = new AboutDialog(BulkUploader.this);
-		about.setLocationRelativeTo(BulkUploader.this);
-		about.setVisible(true);
+	        about.setLocationRelativeTo(BulkUploader.this);
+	        about.setVisible(true);
 	    }
         });
     }
