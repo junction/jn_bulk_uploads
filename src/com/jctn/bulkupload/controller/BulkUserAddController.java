@@ -261,9 +261,9 @@ public class BulkUserAddController {
      private Phone constructPhonesFromLineParts(String[] tokens) {
          boolean valid = false;
 	 Phone   phone = new Phone();
-	 phone.setMacAddress (tokens[0]);
-	 phone.setMake       (tokens[1]);
-	 phone.setModel      (tokens[2]);
+	 phone.setMacAddress (tokens[0].trim());
+	 phone.setMake       (tokens[1].trim());
+	 phone.setModel      (tokens[2].trim());
 	 phone.setGmtOffset  (tokens[3].trim());
 	 
 	 if (StringUtils.isEmpty(phone.getMacAddress())) {
@@ -294,6 +294,12 @@ public class BulkUserAddController {
 		     valid = true;
 		     break;
 		 }
+                 String rewriteModel = phone.getMake() + " " + phone.getModel();
+                 if (Phone.MODELS[i].equalsIgnoreCase (rewriteModel)) {
+                     valid = true;
+                     phone.setModel(rewriteModel);
+                     break;
+                }
 	     }
 	     if (!valid) {
 		 throw new IllegalArgumentException("Phone MODEL was invalid for MacAddress " + phone.getMacAddress());
@@ -320,8 +326,8 @@ public class BulkUserAddController {
     /** Builds a user object from the given array **/
      private User constructUserFromLineParts(String[] tokens) {
          User user = new User();
-	 user.setFirstName(tokens[0]);
-	 user.setLastName (tokens[1]);
+	 user.setFirstName(tokens[0].trim());
+	 user.setLastName (tokens[1].trim());
 	 if (StringUtils.isEmpty(user.getFirstName()) && StringUtils.isEmpty(user.getLastName())) {
 	     throw new IllegalArgumentException("Neither first name nor last name are available.");
 	 }
@@ -336,8 +342,8 @@ public class BulkUserAddController {
 	     throw new IllegalArgumentException("Email address is invalid: "          + tokens[3]);
 	 }
 
-	 user.setEmail(tokens[3]);
-	 user.setAddVoicemail("y".equalsIgnoreCase(tokens[4]));
+	 user.setEmail(tokens[3].trim());
+	 user.setAddVoicemail("y".equalsIgnoreCase(tokens[4].trim()));
 	 return user;
      }
 

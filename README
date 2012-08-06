@@ -1,4 +1,4 @@
-Junction Networks Bulk Uploader -  
+Junction Networks Bulk Uploader -
 Leverages web services to import users & phones in batch
 
 IMPORTANT: In order to build the Bulk Uploader on a Mac USING ANT, both Ant and JarBundler (http://informagen.com/JarBundler/) are required.
@@ -19,8 +19,8 @@ Modified:
 There are three steps necessary to complete the install.
 a. Run the "Junction Networks Bulk Uploader" package installer
 b  Due to an SSL verification issue of the jnctn.com domain you'll need to execute a manual command on your MAC using the java keytool utility.
-Copy the content below into a file called 'www.jnctn.com' (the name actually doesn't matter)  
-from and including 
+Copy the content below into a file called 'www.jnctn.com' (the name actually doesn't matter)
+from and including
 -----BEGIN CERTIFICATE-----  to and including -----END CERTIFICATE-----
 
 -----BEGIN CERTIFICATE-----
@@ -59,12 +59,12 @@ gBz0H5Lf2LvbRnZ67jsB+Ogv8GR+o1kdRwKunOiMnY1AiYI=
 c. Due to SSL verification issues the follow command needs to be executed as root.
       sudo keytool -import -trustcacerts \
         	-file <path-to-cert-file>/cert/www.jnctn.com \
-		-alias www.jnctn.com \ 
-		-keystore /System/Library/Frameworks/JavaVM.framework/Versions/1.6.0/Home/lib/security/cacerts 
+		-alias www.jnctn.com \
+		-keystore /System/Library/Frameworks/JavaVM.framework/Versions/1.6.0/Home/lib/security/cacerts
 
       - Enter your root password to execute keytool
       - When prompted for the "keystore password", the default pwd is "changeit"
-      
+
 
 3. Development
 --------------------
@@ -82,7 +82,7 @@ c. The resources used in the test cases  - test/resources
 ---------------------
 git@github.com:junction/jn_bulk_uploads.git
 
-5. Fixes / Enhancements 
+5. Fixes / Enhancements
 ------------------------
 a. Upon a successful upload; username, domain, and CSV are cached so that end users don't have to re-enter their params.
 b. End users can launch and view the log file after executing the upload directly from confirmation modal
@@ -95,7 +95,7 @@ g. Hid one of two portions of logging that writes password in clear text to log
 12/20/2010
 ^^^^^^^^^^
 - Added support for batch uploading or importing Phones, specifically Polycom phones.
-- Wrote an Ant based build utiilty.
+- Wrote an Ant based build utility.
 
 6. Packaging
 -----------------------
@@ -123,7 +123,7 @@ III. OnSIP domain
 IV.  File Selection of a CSV file.
 
 There are two optional formats.  The first will upload User data, and the second will upload Phone data.
-1. Users example: 
+1. Users example:
 *********************************************************
 First,Last,Extension,Email,Voicemail(Y/N)
 test_123,test_565,2121,cust_1234@example.com,Y
@@ -145,10 +145,11 @@ Polycom Soundpoint 430, Polycom Soundpoint 450
 Polycom Soundpoint 501, Polycom Soundpoint 550
 Polycom Soundpoint 560, Polycom Soundpoint 601
 Polycom Soundpoint 650, Polycom Soundpoint 670
-Polycom Soundstation 4000, Polycom Soundstation 6000
-Polycom Soundstation 7000
+Polycom Soundstation 4000, Polycom Soundstation 5000,
+Polycom Soundstation 6000, Polycom Soundstation 7000,
+Polycom VVX 500, Polycom VVX 1500
 
-Valid GMT Offsets are (-12, -11.5, -11, -10.5, -10 ... , 0, ... .5, 1, 1.5, 2, ... 13)  
+Valid GMT Offsets are (-12, -11.5, -11, -10.5, -10 ... , 0, ... .5, 1, 1.5, 2, ... 13)
 
 MacAddress can be found on the back of the phone.
 

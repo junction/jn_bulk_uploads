@@ -18,8 +18,9 @@ public class Phone {
 	"Polycom Soundpoint 501"   , "Polycom Soundpoint 550",
 	"Polycom Soundpoint 560"   , "Polycom Soundpoint 601",
 	"Polycom Soundpoint 650"   , "Polycom Soundpoint 670",
-	"Polycom Soundstation 4000", "Polycom Soundstation 6000",
-	"Polycom Soundstation 7000"
+	"Polycom Soundstation 4000", "Polycom Soundstation 5000",
+        "Polycom Soundstation 6000", "Polycom Soundstation 7000",
+        "Polycom VVX 500"          , "Polycom VVX 1500"
     };
 
     public static String [] GMT_OFFSET        = {
