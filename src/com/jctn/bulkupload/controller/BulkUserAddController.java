@@ -265,7 +265,7 @@ public class BulkUserAddController {
 	 phone.setMake       (tokens[1].trim());
 	 phone.setModel      (tokens[2].trim());
 	 phone.setGmtOffset  (tokens[3].trim());
-	 
+
 	 if (StringUtils.isEmpty(phone.getMacAddress())) {
 	     /** TODO **/
 	     /** Add a bit more validation to Mac address **/
