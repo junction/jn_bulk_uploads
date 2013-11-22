@@ -1,4 +1,4 @@
-<project name="Bulkuploader" default="compile" basedir=".">
+<project name="Bulkuploader" default="help" basedir=".">
     <description>
         Build BulkUploader
     </description>
@@ -88,6 +88,14 @@
     <target name="clean" description="clean up">
         <delete dir="${classes.dir}"/>
         <delete dir="${release.dir}/Junction Networks Bulk Uploader.pkg" />
+    </target>
+
+    <target name="help" description="help">
+      <echo message="ant compile " />
+      <echo message="  - to compile the java and build the packages " />
+      <echo message="ant clean " />
+      <echo message="  - delete the compiled classes" />
+
     </target>
 
 </project>
