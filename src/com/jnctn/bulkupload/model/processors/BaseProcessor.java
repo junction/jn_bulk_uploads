@@ -27,13 +27,18 @@ public abstract class BaseProcessor {
 
     protected ArrayList<IUploadable> resources = new ArrayList<IUploadable>(20);
 
-    public void add(IUploadable resource) {
-        resources.add(resource);
-    }
+    /**
+     * Errors that occurred serverside
+     */
+    protected ArrayList<String> errors = new ArrayList<String>(20);
 
     public abstract void upload();
 
     protected abstract void resetMetrics();
+
+    public void add(IUploadable resource) {
+        resources.add(resource);
+    }
 
     /**
      * Initializes the session by fetching a new session id
@@ -145,6 +150,19 @@ public abstract class BaseProcessor {
 
     public void setAdminUsername(String adminUsername) {
         this.adminUsername = adminUsername;
+    }
+
+    protected void printPostProcessErrors() {
+        if (errors.size() == 0) {
+            return;
+        }
+        StringBuffer s = new StringBuffer();
+        s.append("Failed uploads diagnostics \n");
+        s.append("=====================================================\n");
+	for (String err : errors) {
+            s.append(err + "\n");
+        }
+        logger.info(s.toString());
     }
 
 }

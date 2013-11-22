@@ -15,12 +15,12 @@ import com.jnctn.bulkupload.util.LogFactory;
 
 public class CsvParser {
 
-    public static final int UNKNOWN_RESOURCE = 5;
+    private static final Logger logger = Logger.getLogger(CsvParser.class);
+
     public static final int USER_RESOURCE = 1;
     public static final int PHONE_RESOURCE = 2;
     public static final int EXTERNAL_RESOURCE = 3;
-
-    private static final Logger logger = Logger.getLogger(CsvParser.class);
+    public static final int UNKNOWN_RESOURCE = 5;
 
     private CsvResourceFactory factory = null;
 
@@ -52,7 +52,7 @@ public class CsvParser {
                 processor = new UserProcessor(progress, user, password, domain, true);
             break;
             default:
-                // error
+                logger.error("Resource type is unknown, not sure if Phone, User or External resource");
             break;
         }
 

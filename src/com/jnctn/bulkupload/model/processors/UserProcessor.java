@@ -44,6 +44,7 @@ public class UserProcessor extends BaseProcessor {
 	_countUserModAlias          = 0;
 	_countVmModAdded            = 0;
 	_countVmModLink             = 0;
+        errors.clear();
     }
 
     private long expectedVMCount() {
@@ -75,7 +76,7 @@ public class UserProcessor extends BaseProcessor {
 	stats.append("<table></html>");
 
 	debug.append("Results Diagnostics\n");
-	debug.append("====================\n");
+	debug.append("=================================================================\n");
 	debug.append("Total Users Processed ");
         debug.append(this._countUserModAdded + " of " + resources.size() + "\n");
         debug.append("Added voicemail " + this._countVmModAdded + " of " + expectedVmCount + "\n");
@@ -83,6 +84,8 @@ public class UserProcessor extends BaseProcessor {
         debug.append("Added Voicemail Link " + this._countVmModLink + "\n");
 
         logger.info(debug.toString());
+
+        printPostProcessErrors();
 
         return stats.toString();
     }
@@ -158,6 +161,7 @@ public class UserProcessor extends BaseProcessor {
         }
 
         if (!StringUtils.isEmpty(user.getError())) {
+            errors.add("Failed to add user " + user.toString());
             return;
         } else{
             this._countUserModAdded++;
@@ -167,6 +171,7 @@ public class UserProcessor extends BaseProcessor {
         logger.debug("Step 2: UserAliasAdd (extension)");
         execUserAliasAdd(user, new UserAliasAdd());
         if (!StringUtils.isEmpty(user.getError())) {
+            errors.add("Failed to create user alias " + user.toString());
             return;
         } else{
             this._countUserModAlias++;
@@ -183,6 +188,7 @@ public class UserProcessor extends BaseProcessor {
         execVoicemailBoxAdd(user, new VoicemailboxAdd());
 
         if (!StringUtils.isEmpty(user.getError())) {
+            errors.add("Failed to add voicemail box for user " + user.toString());
             return;
         } else {
             this._countVmModAdded++;
@@ -193,6 +199,8 @@ public class UserProcessor extends BaseProcessor {
         execUserAddressEdit(user, new UserAddressEdit());
         if (StringUtils.isEmpty(user.getError())) {
             this._countVmModLink++;
+        } else {
+            errors.add("Failed to link voicemail box to user " + user.toString());
         }
 
         if (!user.getShouldSendEmail() &&
@@ -212,28 +220,28 @@ public class UserProcessor extends BaseProcessor {
          Map<String, String> params = new HashMap<String, String>();
 	 params.put(UserAdd.PARAM_SESSION_ID, getSessionId());
 	 UserAdd userAdd = new UserAdd();
-	 /** Username and authusername **/
+	 // Username and authusername
 	 if (user.getAuthUsername() == null) {
 	     user.setAuthUsername(userAdd.createAuthUsername(user.getEmail(), adminDomain));
 	 }
 	 if (user.getUsername() == null) {
 	     user.setUsername(userAdd.createUsername(user.getEmail().split("@")[0]));
 	 }
-	 params.put(UserAdd.PARAM_ORGANIZATION_ID , getOrganizationId() + "");
-	 params.put(UserAdd.PARAM_USERNAME        , user.getUsername());
-	 params.put(UserAdd.PARAM_AUTH_USERNAME   , user.getAuthUsername());
-	 params.put(UserAdd.PARAM_PASSWORD        , user.getPassword());
+	 params.put(UserAdd.PARAM_ORGANIZATION_ID, getOrganizationId() + "");
+	 params.put(UserAdd.PARAM_USERNAME, user.getUsername());
+	 params.put(UserAdd.PARAM_AUTH_USERNAME, user.getAuthUsername());
+	 params.put(UserAdd.PARAM_PASSWORD, user.getPassword());
 	 params.put(UserAdd.PARAM_PASSWORD_CONFIRM, user.getPassword());
-	 params.put(UserAdd.PARAM_EMAIL           , user.getEmail());
-	 params.put(UserAdd.PARAM_DOMAIN          , this.adminDomain);
-	 params.put(UserAdd.PARAM_NAME            , user.getFullName());
+	 params.put(UserAdd.PARAM_EMAIL, user.getEmail());
+	 params.put(UserAdd.PARAM_DOMAIN, this.adminDomain);
+	 params.put(UserAdd.PARAM_NAME, user.getFullName());
 	 UserAddResponse response = userAdd.sendRequest(params);
 	 if (validateResponse(response)) {
-	   user.setUserAdded(true);
-	   user.setUserId(response.getUserId());
+             user.setUserAdded(true);
+             user.setUserId(response.getUserId());
 	 } else {
-	   user.setUserAdded(false);
-	   user.setError(constructErrorString(response.getErrors()));
+             user.setUserAdded(false);
+             user.setError(constructErrorString(response.getErrors()));
 	 }
      }
 
@@ -289,11 +297,11 @@ public class UserProcessor extends BaseProcessor {
 
     void execUserAddressEdit(User user, UserAddressEdit userAddressEdit) throws IOException {
         Map<String, String> params = new HashMap<String, String>();
-	params.put(UserAddressEdit.PARAM_SESSION_ID     , getSessionId());
-	params.put(UserAddressEdit.PARAM_ADDRESS        , user.getUsername()   + "@" + this.adminDomain);
+	params.put(UserAddressEdit.PARAM_SESSION_ID, getSessionId());
+	params.put(UserAddressEdit.PARAM_ADDRESS, user.getUsername()   + "@" + this.adminDomain);
 	params.put(UserAddressEdit.PARAM_DEFAULT_ADDRESS, user.getVmUsername() + "@" + this.adminDomain);
-	params.put(UserAddressEdit.PARAM_USERNAME       , user.getUsername());
-	params.put(UserAddressEdit.PARAM_USER_ID        , user.getUserId() + "");
+	params.put(UserAddressEdit.PARAM_USERNAME, user.getUsername());
+	params.put(UserAddressEdit.PARAM_USER_ID, user.getUserId() + "");
 	UserAddressEditResponse response = userAddressEdit.sendRequest(params);
 	if (validateResponse(response)) {
 	    logger.debug("Mailbox successfully linked.");

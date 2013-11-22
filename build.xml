@@ -93,9 +93,10 @@
     <target name="help" description="help">
       <echo message="ant compile " />
       <echo message="  - to compile the java and build the packages " />
+      <echo message="ant run " />
+      <echo message="  - to run the bulk uploader " />
       <echo message="ant clean " />
       <echo message="  - delete the compiled classes" />
-
     </target>
 
 </project>

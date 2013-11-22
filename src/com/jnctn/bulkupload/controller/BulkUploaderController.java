@@ -82,10 +82,11 @@ public class BulkUploaderController {
     /**
      * Delegates to the webservice controller for parsing and uploading the data.
      *
-     * @param adminUsername
-     * @param adminPassword
-     * @param domain
-     * @param csvFile
+     * @param progress
+     * @param user the admin user "bob@example.onsip.com"
+     * @param password the admin password
+     * @param domain the user's domain
+     * @param csvFile csv file to parse
      *
      * @throws Exception
      */
@@ -107,21 +108,21 @@ public class BulkUploaderController {
      * Returns true/false depending on if the input is valid.
      *
      * @param errors List of errors is stored here. It is cleared before the input is processed.
-     * @param adminUsername Admin username
-     * @param password Admin password
-     * @param adminDomain Admin domain
+     * @param user the admin user "bob@example.onsip.com"
+     * @param password the admin password
+     * @param domain the domain "example.onsip.com"
      * @param csvFile CSV file to process
      *
      * @return true if no errors
     */
-    public boolean validateInput(List<String> errors,  String adminUsername, char[] password,
-        String adminDomain, File csvFile) {
+    public boolean validateInput(List<String> errors,  String user, char[] password,
+        String domain, File csvFile) {
 	errors.clear();
 	try {
-	    if (StringUtils.isEmpty(adminUsername)) {
+	    if (StringUtils.isEmpty(user)) {
 		errors.add("Username is blank.");
 	    }
-	    if (StringUtils.isEmpty(adminDomain)) {
+	    if (StringUtils.isEmpty(domain)) {
 		errors.add("Domain is blank.");
 	    }
 	    if (password == null || password.length == 0 || StringUtils.isEmpty(new String(password))) {

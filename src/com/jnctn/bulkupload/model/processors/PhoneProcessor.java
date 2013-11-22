@@ -50,11 +50,13 @@ public class PhoneProcessor extends BaseProcessor {
 	stats.append("<table></html>");
 
 	debug.append("Results Diagnostics\n");
-	debug.append("====================\n");
+	debug.append("============================================================\n");
         debug.append("Total Phones Processed ");
         debug.append(this.countPhonesAdded + " of " + resources.size() + "\n");
 
         logger.info(debug.toString());
+
+        printPostProcessErrors();
 
         return stats.toString();
     }
@@ -83,6 +85,7 @@ public class PhoneProcessor extends BaseProcessor {
 	logger.info("Step 1: Adding new phone with MacAddress " + phone.getMacAddress());
 	execPhoneAdd(phone, new PhoneAdd());
 	if (!StringUtils.isEmpty(phone.getError())) {
+            errors.add("Failed to add phone " + phone.toString());
 	    return;
 	} else {
 	    this.countPhonesAdded++;

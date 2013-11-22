@@ -52,11 +52,13 @@ public class ExternalResourceProcessor extends BaseProcessor {
         stats.append("<table></html>");
 
         debug.append("Results Diagnostics\n");
-	debug.append("====================\n");
+	debug.append("==================================================\n");
         debug.append("Total External Addresses Processed ");
         debug.append(this.resourcesAdded + " of " + resources.size() + "\n");
 
         logger.info(debug);
+
+        printPostProcessErrors();
 
         return stats.toString();
     }
@@ -89,6 +91,7 @@ public class ExternalResourceProcessor extends BaseProcessor {
             execExternalAddressAdd(resource, new ExternalAddressAdd());
         }
 	if (!StringUtils.isEmpty(resource.getError())) {
+            errors.add("Failed to add external resource " + resource.toString());
 	    return;
 	} else {
 	    this.resourcesAdded++;
