@@ -1,2 +1,2 @@
-First,Last,Extension,Email,Voicemail(Y/N)
-test_123,test_565,2121,cust_1234@example.com,Y
+First,Last,Extension,Email,Voicemail(Y/N),SendWelcomeEmail(Y/N)
+test_123,test_565,2121,oforer@gmail.com,Y,Y

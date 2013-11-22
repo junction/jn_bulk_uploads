@@ -1,2 +1,2 @@
-MACAddress,Make,Model,GMTOffset
-0004f26543aa,Polycom,Polycom Soundpoint 650,-8
+MACAddress,Make,Model,GMTOffset,NatKeepalive,OrganizationWebPassword
+0004f23351ca,Polycom,Polycom Soundpoint 650,-8,y,y

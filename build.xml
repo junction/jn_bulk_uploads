@@ -25,7 +25,7 @@
       <tstamp/>
       <mkdir dir="${classes.dir}"/>
       <mkdir dir="release"/>
-      <copy todir="${classes.dir}/com/jctn/bulkupload/resources">
+      <copy todir="${classes.dir}/com/jnctn/bulkupload/resources">
         <fileset dir="${src.dir}/resources"/>
       </copy>
       <copy todir="${classes.dir}">
@@ -39,15 +39,17 @@
 
       <jarbundler dir="${release.dir}" name="Junction Networks Bulk Uploader" jvmversion="1.5+"
                   build="1.5 with Phone import" version="1.5" verbose="true" icon="${src.dir}/resources/icon_onsip.icns"
-                  bundleid="com.jctn.bulkupload.BulkUploader"
-                  mainclass="com.jctn.bulkupload.BulkUploader">
+                  bundleid="com.jnctn.bulkupload.BulkUploader"
+                  mainclass="com.jnctn.bulkupload.BulkUploader">
         <jarfileset dir="lib">
           <include name="*" />
         </jarfileset>
       </jarbundler>
 
       <!-- Delete the pkg if it exists -->
-      <delete dir="${release.dir}/Junction Networks Bulk Uploader.pkg" />
+      <delete>
+        <fileset dir="${release.dir}" includes="Junction Networks Bulk Uploader*" />
+      </delete>
 
       <!-- Create the pkg -->
       <exec executable="${packagemaker}">
@@ -68,13 +70,18 @@
     </condition>
 
     <target name="pkg-exists" if="resourceexists">
-      <echo message="Successfully created pkg ${release.dir}/Junction Networks Bulk Uploader.pkg"/>
+      <echo message="-----------------------------------------------------------------------------  " />
+      <echo message="| Successfully created pkg '${release.dir}/Junction Networks Bulk Uploader.pkg'" />
+      <echo message="|                                                                              " />
+      <echo message="| Send '${release.dir}/Junction Networks Bulk Uploader.pkg' to larry@onsip.com " />
+      <echo message="| Larry should un-install the old and install the new                          " />
+      <echo message="------------------------------------------------------------------------------ " />
     </target>
 
     <target name="run" description="run">
       <java fork="yes" failonerror="true"
            maxmemory="128m" classpathref="classpath"
-	   classname="com.jctn.bulkupload.BulkUploader">
+	   classname="com.jnctn.bulkupload.BulkUploader">
       </java>
     </target>
 
