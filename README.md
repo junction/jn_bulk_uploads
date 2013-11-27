@@ -34,58 +34,8 @@ c. The resources used in the test cases  - test/resources
 -----------------------------------------------------------------------------------------------
 There are three steps necessary to complete the install.
 a. Run the "Junction Networks Bulk Uploader" package installer
-b  Due to an SSL verification issue of the jnctn.com domain you'll need to execute a manual
-command on your MAC using the java keytool utility.  You MAY need to Copy the content below
-into a file called 'www.jnctn.com' (the name actually doesn't matter) from and including
------BEGIN CERTIFICATE-----  to and including -----END CERTIFICATE-----
 
------BEGIN CERTIFICATE-----
-MIIFjzCCBHegAwIBAgIQJPrXTaJ+UUY7Tuw2pU2FFDANBgkqhkiG9w0BAQUFADBi
-MQswCQYDVQQGEwJVUzEhMB8GA1UEChMYTmV0d29yayBTb2x1dGlvbnMgTC5MLkMu
-MTAwLgYDVQQDEydOZXR3b3JrIFNvbHV0aW9ucyBDZXJ0aWZpY2F0ZSBBdXRob3Jp
-dHkwHhcNMTAwOTI3MDAwMDAwWhcNMTQxMjA2MjM1OTU5WjCBpzELMAkGA1UEBhMC
-VVMxDjAMBgNVBBETBTE4OTQwMQswCQYDVQQIEwJQQTEQMA4GA1UEBxMHTmV3dG93
-bjEbMBkGA1UECRMSMjg2NSBTLiBFYWdsZSBSb2FkMRowGAYDVQQKExFKdW5jdGlv
-biBOZXR3b3JrczEYMBYGA1UECxMPU2VjdXJlIExpbmsgU1NMMRYwFAYDVQQDEw13
-d3cuam5jdG4uY29tMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA2FRG
-Y55c5rmtyOnQk6h5r3qQNKYNvVZ3p/DLcR4Y0fPimoXvOeeY5P9SUSmMZC6y1Od9
-53Je4HOnuBmiX8jDWOANv6bhvEJPEAhzpo8ksCpKJLzcDkRsfHBOrlZZ+mhSjqZX
-fSn3mw5hE5HtVdof0x6Re/ZhvN6agrihAwbUpL445jWw+gxnu0ttRZ/Tn4bWvT42
-YxFn6U8f/01mUBZtt9D3cc+Sq+EiFDSV5J/x3b+x8KYmbIeWfrhvU+tp8SmVFjeu
-Q7UJp2SjJFD+e9hF1619BxdpcGsfaUhRlLY6c7cyqyj6rIvJDdYuuCGPt5zRAL4J
-j/+tKTBTQO7t5+4ySQIDAQABo4IB+TCCAfUwHwYDVR0jBBgwFoAUPEHijwgIqUwl
-iY1txTjQ/IWMYhcwHQYDVR0OBBYEFASL3rRrq1iQOz7z6mh98gOFdspQMA4GA1Ud
-DwEB/wQEAwIFoDAMBgNVHRMBAf8EAjAAMB0GA1UdJQQWMBQGCCsGAQUFBwMBBggr
-BgEFBQcDAjBrBgNVHSAEZDBiMGAGDCsGAQQBhg4BAgEDATBQME4GCCsGAQUFBwIB
-FkJodHRwOi8vd3d3Lm5ldHdvcmtzb2x1dGlvbnMuY29tL2xlZ2FsL1NTTC1sZWdh
-bC1yZXBvc2l0b3J5LWNwcy5qc3AwegYDVR0fBHMwcTA2oDSgMoYwaHR0cDovL2Ny
-bC5uZXRzb2xzc2wuY29tL05ldHdvcmtTb2x1dGlvbnNfQ0EuY3JsMDegNaAzhjFo
-dHRwOi8vY3JsMi5uZXRzb2xzc2wuY29tL05ldHdvcmtTb2x1dGlvbnNfQ0EuY3Js
-MHMGCCsGAQUFBwEBBGcwZTA8BggrBgEFBQcwAoYwaHR0cDovL3d3dy5uZXRzb2xz
-c2wuY29tL05ldHdvcmtTb2x1dGlvbnNfQ0EuY3J0MCUGCCsGAQUFBzABhhlodHRw
-Oi8vb2NzcC5uZXRzb2xzc2wuY29tMBgGA1UdEQQRMA+CDXd3dy5qbmN0bi5jb20w
-DQYJKoZIhvcNAQEFBQADggEBAC8dGuVvue69vDzIsxwacmOHXts/tkdPdf2T/b2K
-p36OFjWyUyzUJnRmiOBflmLDvpYYy3PZGXC9k4k7eoew3Ye+0IZGycHrelRpkdEm
-DEgpQisYFJgbz195L8C6AXstIktrugNOjGrX+XA0MEb1EuWB8ES4Xf/w3w1cBlps
-jr0jOosxTNRGs1VufNgiLl1tSNX3PzqoSdQ/BM+A1Xiz9Lpb0VfMf6Gc6cJLe6TD
-xvxrOi+dPpAImpuZAAnkyoSsJCoKjKWoESL3ivhg4GZrvBcFV7mpeGw4kNngLIqy
-gBz0H5Lf2LvbRnZ67jsB+Ogv8GR+o1kdRwKunOiMnY1AiYI=
------END CERTIFICATE-----
-
-c. Due to SSL verification issues the follow command needs to be executed as root.
-   sudo keytool -import -trustcacerts \
-     -file <path-to-cert-file>/cert/www.jnctn.com \
-	 -alias www.jnctn.com \
-	 -keystore /System/Library/Frameworks/JavaVM.framework/Versions/1.6.0/Home/lib/security/cacerts
-
-   - Enter your root password to execute keytool
-   - When prompted for the "keystore password", the default pwd is "changeit"
-
-4. Git Repository
----------------------------------------------------------------------------------------------
-git@github.com:junction/jn_bulk_uploads.git
-
-5. Fixes / Enhancements
+4. Fixes / Enhancements
 ---------------------------------------------------------------------------------------------
 
 12/20/2010
@@ -100,7 +50,7 @@ git@github.com:junction/jn_bulk_uploads.git
 - Bulk import support for External Telephone Number
 - Codebase refactor
 
-6. Packaging (requires PackageMaker and JarBundler)
+5. Packaging (requires PackageMaker and JarBundler)
 ---------------------------------------------------------------------------------------------
 - Type "ant" to see the help
 - Executing "Ant compile" will compile all the source, create the Jar files,
@@ -110,7 +60,7 @@ git@github.com:junction/jn_bulk_uploads.git
 - Create the app bundle using "Jar Bundler" followed by "PackageMaker".
   PackageMaker comes with XCode.
 
-7. Using
+6. Using
 ---------------------------------------------------------------------------------------------
 The Bulk Uploader comes in a Mac Package Installer.  Running the installer
 will place the app "Junction Networks Bulk Uploader.app" into Mac Applications.
@@ -148,11 +98,3 @@ c. External SIP Addresses:
 d. External Telephone Number:
 > External Telephone Number
 > 1-332-333-2322
-
-
-9. BUGS
----------------------------------------------------------------------------------------------
-developer@junctionnetworks.com
-
-
-
