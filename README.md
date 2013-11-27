@@ -132,16 +132,16 @@ a. Users example:
 - First Name, Last Name, Extension, Email, Include Voicemail (Y, N), Send Welcome Email (Y,N)
 
 b. Phones example:
-> MacAddress, Make, Model, GMT Offset, NatKeepalive (Y/N), SetOrganizationWebPassword (Y/N)
-> 0004f2accaca, Polycom, Polycom Soundpoint 330, 4, Y, N
+> MacAddress, Make, Model, GMT Offset, NatKeepalive (Y/N), SetOrganizationWebPassword (Y/N),Company Directory (Y/N)
+> 0004f2accaca, Polycom, Polycom Soundpoint 330, 4, Y, N, Y
 
 - The first line is assumed to be the header and is required for phone imports.
 - Valid GMT Offsets are (-12, -11.5, -11, -10.5, -10 ... , 0, ... .5, 1, 1.5, 2, ... 13)
 - MacAddress can be found on the back of the phone.
 
 c. External SIP Addresses:
-> External SIP Address, Username
-> bob@example.onsip.com, Bob
+> External SIP Address, Name, Extension
+> bob@example.onsip.com, Bob, 2343
 
 - The external sip address domain cannot be the same as the admin's domain
 

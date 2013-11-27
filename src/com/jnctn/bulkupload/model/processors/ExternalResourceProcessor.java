@@ -64,17 +64,21 @@ public class ExternalResourceProcessor extends BaseProcessor {
         stats.append("<tr><td>Total External Addresses Processed</td><td>");
         stats.append(this.resourcesAdded + " of " + resources.size());
         stats.append("</td></tr>");
-        stats.append("<tr><td>Total Extensions Processed</td><td>");
-        stats.append(this.extensionsAdded + " of " + this.expectedExtensionCount());
-        stats.append("</td></tr>");
+        if (this.expectedExtensionCount() > 0) {
+            stats.append("<tr><td>Total Extensions Processed</td><td>");
+            stats.append(this.extensionsAdded + " of " + this.expectedExtensionCount());
+            stats.append("</td></tr>");
+        }
         stats.append("<table></html>");
 
         debug.append("Results Diagnostics\n");
 	debug.append("==================================================\n");
         debug.append("Total External Addresses Processed ");
         debug.append(this.resourcesAdded + " of " + resources.size() + "\n");
-        debug.append("Total Extensions Processed ");
-        debug.append(this.extensionsAdded + " of " + this.expectedExtensionCount() + "\n");
+        if (this.expectedExtensionCount() > 0) {
+            debug.append("Total Extensions Processed ");
+            debug.append(this.extensionsAdded + " of " + this.expectedExtensionCount() + "\n");
+        }
 
         logger.info(debug);
 
