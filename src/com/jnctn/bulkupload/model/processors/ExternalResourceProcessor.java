@@ -20,6 +20,7 @@ public class ExternalResourceProcessor extends BaseProcessor {
     private ArrayList<ExternalResource> _externalResources = null;
 
     private int resourcesAdded = 0;
+    private int extensionsAdded = 0;
 
     public ExternalResourceProcessor(ProgressController progress, String username,
         String password, String domain, boolean createSession) {
@@ -36,6 +37,20 @@ public class ExternalResourceProcessor extends BaseProcessor {
 
     protected void resetMetrics(){
 	this.resourcesAdded = 0;
+        this.extensionsAdded = 0;
+    }
+
+    private long expectedExtensionCount() {
+        long count = 0;
+        for (IUploadable resource : resources) {
+            if (resource instanceof ExternalAddress) {
+                ExternalAddress address = (ExternalAddress) resource;
+                if (address.getExtension() != null) {
+                    count++;
+                }
+            }
+        }
+        return count;
     }
 
     @Override
@@ -49,12 +64,17 @@ public class ExternalResourceProcessor extends BaseProcessor {
         stats.append("<tr><td>Total External Addresses Processed</td><td>");
         stats.append(this.resourcesAdded + " of " + resources.size());
         stats.append("</td></tr>");
+        stats.append("<tr><td>Total Extensions Processed</td><td>");
+        stats.append(this.extensionsAdded + " of " + this.expectedExtensionCount());
+        stats.append("</td></tr>");
         stats.append("<table></html>");
 
         debug.append("Results Diagnostics\n");
 	debug.append("==================================================\n");
         debug.append("Total External Addresses Processed ");
         debug.append(this.resourcesAdded + " of " + resources.size() + "\n");
+        debug.append("Total Extensions Processed ");
+        debug.append(this.extensionsAdded + " of " + this.expectedExtensionCount() + "\n");
 
         logger.info(debug);
 
@@ -84,17 +104,30 @@ public class ExternalResourceProcessor extends BaseProcessor {
     }
 
     private void upload(ExternalResource resource) throws IOException {
+        boolean hasExtension = false;
 	logger.info("Step 1: Adding new resource " + resource.getUsername());
         if (resource instanceof TelephoneNumberAddress) {
             execExternalTelephoneNumberAdd(resource, new TelephoneNumberAddressAdd());
         } else {
+            ExternalAddress externalAddress = (ExternalAddress) resource;
+            hasExtension = (externalAddress.getExtension() != null);
             execExternalAddressAdd(resource, new ExternalAddressAdd());
         }
+
 	if (!StringUtils.isEmpty(resource.getError())) {
             errors.add("Failed to add external resource " + resource.toString());
 	    return;
 	} else {
 	    this.resourcesAdded++;
+	}
+        if (!hasExtension) return;
+        logger.info("Step 2: Adding the extension");
+        execAppExtensionAddExtension(resource, new AppExtensionAddExtension());
+	if (!StringUtils.isEmpty(resource.getError())) {
+            errors.add("Failed to add extension " + resource.toString());
+	    return;
+	} else {
+            this.extensionsAdded++;
 	}
     }
 
@@ -127,6 +160,7 @@ public class ExternalResourceProcessor extends BaseProcessor {
 	params.put(ExternalAddressAdd.PARAM_DOMAIN, this.adminDomain);
 	params.put(ExternalAddressAdd.PARAM_ORGANIZATION_ID, getOrganizationId() + "");
 	params.put(ExternalAddressAdd.PARAM_USERNAME, resource.getUsername());
+	params.put(ExternalAddressAdd.PARAM_NAME, resource.getName());
 	params.put(ExternalAddressAdd.PARAM_FOREIGN_ADDRESS, externalAddress.getForeignAddress());
 
 	ExternalAddressAddResponse response = externalAddressAdd.sendRequest(params);
@@ -137,4 +171,29 @@ public class ExternalResourceProcessor extends BaseProcessor {
 	    resource.setError(constructErrorString(response.getErrors()));
 	}
     }
+
+     /**
+      *
+      */
+     void execAppExtensionAddExtension(ExternalResource resource,
+         AppExtensionAddExtension appExtensionAddExtension) throws IOException {
+
+        ExternalAddress externalAddress = (ExternalAddress) resource;
+
+         Map<String, String> params = new HashMap<String, String>();
+
+	 params.put(AppExtensionAddExtension.PARAM_SESSION_ID, getSessionId());
+	 params.put(AppExtensionAddExtension.PARAM_ORGANIZATION_ID, getOrganizationId() + "");
+	 params.put(AppExtensionAddExtension.PARAM_EXTENSION, externalAddress.getExtension() + "");
+	 params.put(AppExtensionAddExtension.PARAM_ADDRESS_USERNAME, externalAddress.getUsername());
+
+	 AppExtensionAddExtensionResponse response = appExtensionAddExtension.sendRequest(params);
+
+	 if (validateResponse(response)) {
+	     logger.debug("Adding extension ");
+	 } else {
+	     logger.debug("Failed to add extension.");
+             resource.setError(constructErrorString(response.getErrors()));
+	 }
+     }
 }

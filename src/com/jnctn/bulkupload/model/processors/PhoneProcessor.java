@@ -101,6 +101,7 @@ public class PhoneProcessor extends BaseProcessor {
         params.put(PhoneAdd.PARAM_MAKE            , phone.getMake());
         params.put(PhoneAdd.PARAM_MODEL           , phone.getModel());
         params.put(PhoneAdd.PARAM_NATKEEPALIVE    , phone.getNatKeepalive() + "");
+        params.put(PhoneAdd.PARAM_DIRECTORY       , phone.getCompanyDirectory() + "");
         params.put(PhoneAdd.PARAM_ORGANIZATION_WEB_PASSWORD, phone.getOrganizationWebPassword() + "");
         PhoneAddResponse response = phoneAdd.sendRequest(params);
         if (validateResponse(response)) {

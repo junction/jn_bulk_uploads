@@ -143,11 +143,15 @@ public class CsvParser {
 
         private ExternalResource constructExternalFromLineParts(String[] tokens) {
             ExternalResource resource = null;
-            String r = tokens[0].trim();
-            if (r.indexOf("@") != -1) {
-                resource = new ExternalAddress(tokens[1].trim(), r);
+            String entity = tokens[0].trim();
+            if (entity.indexOf("@") != -1) {
+                resource = new ExternalAddress(tokens[1].trim(), entity);
+                if (tokens.length > 2 && tokens[2].trim().length() > 0) {
+                    ExternalAddress externalAddress = (ExternalAddress) resource;
+                    externalAddress.setExtension(tokens[2].trim());
+                }
             } else {
-                resource = new TelephoneNumberAddress(r);
+                resource = new TelephoneNumberAddress(entity);
             }
 
             return resource;
@@ -161,7 +165,8 @@ public class CsvParser {
             phone.setModel(tokens[2].trim());
             phone.setGmtOffset(tokens[3].trim());
             phone.setNatKeepalive(tokens.length >= 5 && tokens[4].trim().equalsIgnoreCase("Y"));
-            phone.setOrganizationWebPassword(tokens.length == 6 && tokens[5].trim().equalsIgnoreCase("Y"));
+            phone.setOrganizationWebPassword(tokens.length >= 6 && tokens[5].trim().equalsIgnoreCase("Y"));
+            phone.setCompanyDirectory(tokens.length >= 7 && tokens[6].trim().equalsIgnoreCase("Y"));
 
             if (StringUtils.isEmpty(phone.getMacAddress())) {
                 throw new IllegalArgumentException("Phone Mac address is invalid");

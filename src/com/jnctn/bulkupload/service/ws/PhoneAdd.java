@@ -20,6 +20,7 @@ public class PhoneAdd extends AbstractWebservice<PhoneAddResponse> {
     public static final String PARAM_MAKE            = "Make";
     public static final String PARAM_MODEL           = "Model";
     public static final String PARAM_NATKEEPALIVE    = "NatKeepalive";
+    public static final String PARAM_DIRECTORY       = "Directory";
     public static final String PARAM_ORGANIZATION_WEB_PASSWORD = "OrganizationWebPassword";
 
     public PhoneAdd() {
@@ -39,9 +40,6 @@ public class PhoneAdd extends AbstractWebservice<PhoneAddResponse> {
 	    if (serviceObj == null) {
 		return phoneAddResponse;
 	    }
-
-	    //JSONObject jPhoneAlias =  (JSONObject) serviceObj.get("PhoneAlias");
-	    //phoneAddResponse.setExtension((String) jPhoneAlias.get("AliasUsername"));
 	} catch (Exception e) {
 	    throw new IllegalStateException("Error processing PhoneAdd response:", e);
 	}

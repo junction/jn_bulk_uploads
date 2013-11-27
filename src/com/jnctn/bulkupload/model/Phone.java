@@ -82,6 +82,7 @@ public class Phone implements IUploadable {
     private String _gmtOffset;
     private String _macAddress;
     private boolean _hasNatKeepalive;
+    private boolean _companyDirectory;
     private boolean _hasOrganizationWebPassword;
 
     public String getError() {
@@ -112,6 +113,10 @@ public class Phone implements IUploadable {
         this._hasNatKeepalive = hasNatkeepalive;
     }
 
+    public void setCompanyDirectory(boolean companyDirectory) {
+        this._companyDirectory = companyDirectory;
+    }
+
     public void setOrganizationWebPassword(boolean hasOrganizationWebPassword) {
         this._hasOrganizationWebPassword = hasOrganizationWebPassword;
     }
@@ -140,14 +145,19 @@ public class Phone implements IUploadable {
         return this._hasNatKeepalive;
     }
 
+    public boolean getCompanyDirectory() {
+        return this._companyDirectory;
+    }
+
     @Override
     public String toString() {
 	return "Phone{" +
 	    "error=" + (StringUtils.isEmpty(this._error) ? "NONE" : this._error) +
 	    ";macaddress=" + this._macAddress +
-	    ";make=" + this._make       +
-	    ";model=" + this._model      +
+	    ";make=" + this._make  +
+	    ";model=" + this._model +
             ";natkeepalive=" + this._hasNatKeepalive +
+            ";companydirectory=" + this._companyDirectory +
             ";organizationwebpassword=" + this._hasOrganizationWebPassword +
 	    ";gmtOffset="  + this._gmtOffset  + "}";
     }

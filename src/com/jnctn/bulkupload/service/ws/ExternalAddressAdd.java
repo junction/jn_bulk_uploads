@@ -14,6 +14,7 @@ import com.jnctn.bulkupload.model.json.*;
 public class ExternalAddressAdd extends AbstractWebservice<ExternalAddressAddResponse> {
     public static final String PARAM_ORGANIZATION_ID = "OrganizationId";
     public static final String PARAM_USERNAME        = "Username";
+    public static final String PARAM_NAME            = "Name";
     public static final String PARAM_DOMAIN          = "Domain";
     public static final String PARAM_FOREIGN_ADDRESS = "ForeignAddress";
 

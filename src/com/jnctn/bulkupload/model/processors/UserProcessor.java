@@ -135,7 +135,7 @@ public class UserProcessor extends BaseProcessor {
              * see what kind of error message is returned for existing username and auth_username
              * and leverage here
              */
-            if (user.getError().contains("username") || user.getError().contains("auth_username")) {
+            if (user.getError().toLowerCase().contains("username") || user.getError().toLowerCase().contains("auth_username")) {
                 String suffixStr = suffix + "";
                 user.setUsername(originalUsername);
                 user.setAuthUsername(originalAuthUsername);
@@ -246,7 +246,9 @@ public class UserProcessor extends BaseProcessor {
      }
 
      /**
+      *
       * @param user
+      * @param userAliasAdd
       */
      void execUserAliasAdd(User user, UserAliasAdd userAliasAdd) throws IOException {
          Map<String, String> params = new HashMap<String, String>();
